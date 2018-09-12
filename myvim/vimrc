@@ -1,0 +1,134 @@
+syntax on
+set nu
+set ruler
+set autoindent
+set cindent
+set shiftwidth=4
+set tabstop=4
+set background=dark
+set softtabstop=4
+set t_Co=256
+colorscheme molokai
+let &termencoding=&encoding
+set fileencodings=utf-8,gbk
+"set mouse=a
+set foldmethod=indent
+set nofoldenable
+"za zM zR......
+"set incsearch
+"set ignorecase
+"set nocompatible
+"set wildmenu
+"
+"set gcr=a:block-blinkon0
+"set guioptions-=l
+"set guioptions-=L
+"set guioptions-=r
+"set guioptions-=R
+"set guioptions-=m
+"set guioptions-=T
+"
+""set laststatus=2
+"set cursorline
+""set cursorcolumn
+"set hlsearch
+
+let mapleader=";"
+inoremap <leader><leader> <Esc>
+nmap <leader>b 0
+nmap <leader>l $
+nmap <leader>w :w<CR>
+nmap <leader>q :q!<CR>
+nnoremap <leader>lw <C-W>l
+nnoremap <leader>hw <C-W>h
+nnoremap <leader>kw <C-W>k
+nnoremap <leader>jw <C-W>j
+nnoremap <leader>ww <C-W><C-W>
+
+
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'
+"taglist-------------------
+"let Tlist_Auto_Open=1
+"let Tlist_Use_Right_Window=1
+"let Tlist_Show_One_File=1
+"let TList_Use_Right_Window=1
+"let TList_Use_Left_Window=1
+"let Tlist_WinHeigth=100
+"let Tlist_WinWidth=10
+"let Tlist_Exit_OnlyWindow=1
+"noremap <F10> :TlistToggle<CR>
+"NERDTree-------------------
+
+"map <F9> :NERDTreeToggle<CR>
+"let NERDTreeWinPos='left'
+
+nmap <F8> :TrinityToggleAll<CR>
+nmap <F9> :TrinityToggleNERDTree<CR>
+nmap <F10> :TrinityToggleTagList<CR>
+nmap <F11> :TrinityToggleSourceExplorer<CR>
+nmap <silent> <leader>sw :FSHere<cr>
+"it can move the folder
+
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''
+set tags=tags;
+map <C-F8> :!ctags -R<CR>
+"ctrl+] g+] ctrl+o
+map <C-F9> :!echo "set tags=""`pwd`" >> ~/.vimrc<CR>
+function! UpdateCtags()
+    let curdir=getcwd()
+    while !filereadable("./tags")
+        cd ..
+        if getcwd() == "/"
+            break
+        endif
+    endwhile
+    if filewritable("./tags")
+        !ctags -R --file-scope=yes --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q
+        TlistUpdate
+    endif
+    execute ":cd " . curdir
+endfunction
+map <C-F10> :call UpdateCtags()<CR>
+map <leader>cb :!ctags -R<CR>
+map <leader>cu :call UpdateCtags()<CR>
+map <leader>cw :!echo "set tags+=""`pwd`""/tags" >> ~/.vimrc<CR>
+"g] 
+nmap <leader>jf g]
+nmap <Leader>jn :tnext<CR>
+nmap <Leader>jp :tprevious<CR>
+nmap <leader>jb <C-o>
+"<C-t> <C-i>
+nnoremap <leader>fs :CtrlSF<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""''''''
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Bundle 'L9'
+Bundle 'tpope/vim-fugitive'
+"Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'ctrlpvim/ctrlp.vim'
+call vundle#end()
+filetype plugin indent on
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""''
+"% 当前完整的文件名
+"%:h 文件名的头部，即文件目录.例如../path/test.c就会为../path
+"%:t 文件名的尾部.例如../path/test.c就会为test.c
+"%:r 无扩展名的文件名.例如../path/test就会成为test
+"%:e 扩展名
+nmap <leader>bb :!gcc -o %:r %:t<CR>
+nmap <leader>mm :!chmod a+x %:r<CR>
+nmap <leader>rr :!./%:r<CR>
+"u ctrl+r
+
+set tags=/QSDK/qsdk/build_dir/linux-ar71xx_generic/qca-wifi-g2f43f2e138b-dirty-perf/qca-wifi-g2f43f2e138b-dirty/hal
+set tags+=/home/linshaobo/qemu/uboot/u-boot-2017.11/tags
